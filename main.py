@@ -120,7 +120,7 @@ st.markdown(
 with st.sidebar:
     add_radio = st.radio(
         " ",
-        ("Detector", "Examples",  "Benchmark", )
+        ("Detector", "Examples", )
 
     )
 
@@ -501,6 +501,30 @@ if add_radio == "Detector":
                             
                     elif files[-3:] == "jpg" or files[-3:] == "JPG":
                         st.info("Running DeepFake Image Detectors selected! You can read about them in the About tab.")
+                        
+                                                # Function to render a speedometer-like gauge
+                        def render_speedometer(probability, title="DeepFake Probability"):
+                            fig = go.Figure(go.Indicator(
+                                mode="gauge+number",
+                                value=probability * 100,  # Convert to percentage
+                                title={'text': title},
+                                gauge={
+                                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                                    'bar': {'color': "darkred"},
+                                    'steps': [
+                                        {'range': [0, 50], 'color': "lightgreen"},
+                                        {'range': [50, 100], 'color': "tomato"}
+                                    ],
+                                    'threshold': {
+                                        'line': {'color': "red", 'width': 4},
+                                        'thickness': 0.75,
+                                        'value': 70  # Fake threshold
+                                    }
+                                }
+                            ))
+                            st.plotly_chart(fig)
+
+                        
                         print("--------------------------------------------------")
                         print(model_option)
                         file_type = "image"
@@ -545,7 +569,8 @@ if add_radio == "Detector":
                         except:
                             pass
                         #print(probab)
-                        #st.write("The probability of this video being a deepfake is")
+                        st.write("The probability of this video being a deepfake is")
+                        render_speedometer(probab, title="Detection Probability for Image")
                         #st.write(probab_deepware, probab_cvit, probab_selim, probab_boken, probab)
                         #st.write(inference_time_deepware, inference_time_cvit, inference_time_selim, inference_time_boken)
                         print("--------------------------------------------------")
@@ -627,7 +652,26 @@ if add_radio == "Detector":
                             
                     
                         st.balloons()
+                        if uploaded_file or url:
+                        # Reset probability for new uploads
+                            st.session_state.probab = None  
 
+                        # Perform your detection logic here
+                        if uploaded_file:
+                            # Process the uploaded file
+                              # Example calculated probability
+                            st.session_state.probab = probab  # Store result
+
+                        
+                if st.session_state.probab is not None:
+                    if st.session_state.probab <= 0.5:
+                        st.write("This file is **Real**.")
+                    elif st.session_state.probab == 0.5:
+                        st.write("This file is **Not Sure**.")
+                    else:
+                        st.write("This file is **Deepfake**.")
+            
+            
             if probab>0.7:
                 save(url)
 
@@ -768,7 +812,6 @@ if add_radio == "Detector":
         #st.image("https://static.streamlit.io/examples/dice.jpg")
         st.video('https://youtu.be/cQ54GDm1eL0') 
         st.write("""[Read more](https://ineqe.com/2021/10/13/a-beginners-guide-to-deepfakes/)""")
-        st.snow()
 
 
 
@@ -1015,7 +1058,7 @@ if add_radio == "Benchmark":
                         st.plotly_chart(fig)
 
                     # Example Usage
-                    render_speedometer(0.75, title="DeepFake Detection Score")  # Displays 75% probability
+                    render_speedometer(probab, title="DeepFake Detection Score")  # Displays 75% probability
 
 
                     # Plot inference times
