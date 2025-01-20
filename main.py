@@ -1004,17 +1004,7 @@ if add_radio == "Benchmark":
 
 
 if add_radio == "About":
-
-
-    st.subheader("Detectors we used for this demo, credits to the original authors. These folks are amazing! 😎")
-    with st.expander(("Guide on how to add your detector to this platform!")):
-        markdown_file_path = "Add_Custom_Model_to_DeepSafe.md"
-
-        # Read the contents of the Markdown file
-        markdown_content = read_markdown_file(markdown_file_path)
-
-        # Display the Markdown content in Streamlit
-        st.markdown(markdown_content)
+    
 
 
     reference_list, len_list = get_reference()
