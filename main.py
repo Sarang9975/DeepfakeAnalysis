@@ -88,9 +88,13 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 st.markdown(
     """
     <style>
+    .stApp {
+        background: #0b0b0b;
+    }
     [data-testid="stSidebar"] {
         min-width: 250px;
         max-width: 250px;
+        background: #0b0b0b;
         width: 250px;
     }
     [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
