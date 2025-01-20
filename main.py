@@ -176,6 +176,24 @@ if add_radio == "Detector":
             #st.write('You selected:', model_option)
 
 
+        elif extension == "jpg" or extension == "JPG":
+            uploaded_image = Image.open(uploaded_file)
+            save_image(uploaded_file)
+            st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
+
+            # cosmetic touch of names
+            models_list_image_only_names = []
+            for model in models_list_image:
+                models_list_image_only_names.append(model[:-6].title())
+
+            model_option = st.multiselect( 'Select a DeepFake Detection Method',
+                            models_list_image_only_names)
+
+            model_option = sorted(model_option)
+
+            #st.write('You selected:', model_option)
+
+
         elif extension == "jpeg" or extension == "JPEG":
             uploaded_image = Image.open(uploaded_file)
             save_image(uploaded_file)
@@ -193,22 +211,6 @@ if add_radio == "Detector":
 
             #st.write('You selected:', model_option)
 
-        elif extension == "jpg" or extension == "JPG":
-            uploaded_image = Image.open(uploaded_file)
-            save_image(uploaded_file)
-            st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
-
-            # cosmetic touch of names
-            models_list_image_only_names = []
-            for model in models_list_image:
-                models_list_image_only_names.append(model[:-6].title())
-
-            model_option = st.multiselect( 'Select a DeepFake Detection Method',
-                            models_list_image_only_names)
-
-            model_option = sorted(model_option)
-
-            #st.write('You selected:', model_option)
 
         elif extension == "mp4" or extension == "MP4":
             save_video(uploaded_file)
