@@ -89,7 +89,7 @@ st.markdown(
     """
     <style>
 
-    
+
     .stApp {
         background: #0b0b0b;
     }
@@ -106,7 +106,7 @@ st.markdown(
         width: 250px;
         margin-left: 0px;
     }
-    #MainMenu {visibility: hidden;}
+    #MainMenu {visibility: box;}
     header {visibility: hidden;}
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] {
         display: none;
