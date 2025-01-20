@@ -106,7 +106,7 @@ st.markdown(
         width: 250px;
         margin-left: 0px;
     }
-    #MainMenu {visibility: box;}
+    #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] {
         display: none;
