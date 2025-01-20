@@ -1,5 +1,5 @@
 import streamlit as st
-
+import plotly.graph_objects as go
 favicon = './assets/icon.png'
 st.set_page_config(page_title='DeepSafe', page_icon = favicon, initial_sidebar_state = 'expanded')
 
@@ -120,7 +120,7 @@ st.markdown(
 with st.sidebar:
     add_radio = st.radio(
         " ",
-        ("Detector", "Examples", "Learn", "Benchmark", "About")
+        ("Detector", "Examples",  "Benchmark", )
 
     )
 
@@ -354,13 +354,35 @@ if add_radio == "Detector":
             for files in os.listdir("./temp"):
                 if files[:6] == "delete":
                     if files[-3:] == "mp4" or files[-3:] == "MP4":
-                        st.info("Running DeepFake Video Detectors selected! You can read about them in the About tab.")
-                        print("--------------------------------------------------")
-                        print(model_option)
-                        file_type = "video"
-                        print("Filetype: Video")
-                        file_size = os.path.getsize("./temp/delete.mp4") / (1024*1024)
-                        print("Filesize: ", file_size , "MB")
+                        # Function to render a speedometer-like gauge
+                        def render_speedometer(probability, title="DeepFake Probability"):
+                            fig = go.Figure(go.Indicator(
+                                mode="gauge+number",
+                                value=probability * 100,  # Convert to percentage
+                                title={'text': title},
+                                gauge={
+                                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                                    'bar': {'color': "darkred"},
+                                    'steps': [
+                                        {'range': [0, 50], 'color': "lightgreen"},
+                                        {'range': [50, 100], 'color': "tomato"}
+                                    ],
+                                    'threshold': {
+                                        'line': {'color': "red", 'width': 4},
+                                        'thickness': 0.75,
+                                        'value': 50  # Fake threshold
+                                    }
+                                }
+                            ))
+                            st.plotly_chart(fig)
+
+                            st.info("Running DeepFake Video Detectors selected! You can read about them in the About tab.")
+                            print("--------------------------------------------------")
+                            print(model_option)
+                            file_type = "video"
+                            print("Filetype: Video")
+                            file_size = os.path.getsize("./temp/delete.mp4") / (1024*1024)
+                            print("Filesize: ", file_size , "MB")
 
 
                         # correcing the names of models - removing the cosmetics
@@ -398,10 +420,11 @@ if add_radio == "Detector":
                             probab = round(float(mean(model_inference_probability_list)), 5)
                         except:
                             pass
-                        #print(probab)
-                        #st.write("The probability of this video being a deepfake is")
-                        #st.write(probab_deepware, probab_cvit, probab_selim, probab_boken, probab)
-                        #st.write(inference_time_deepware, inference_time_cvit, inference_time_selim, inference_time_boken)
+                        print(probab)
+                        st.write("The probability of this video being a deepfake is")
+                        render_speedometer(probab, title="Detection Probability for Video")  # Speedometer here
+                        # st.write(probab_deepware, probab_cvit, probab_selim, probab_boken, probab)
+                        # st.write(inference_time_deepware, inference_time_cvit, inference_time_selim, inference_time_boken)
                         print("--------------------------------------------------")
                         
                         st.subheader("DeepFake Detection Stats")
@@ -776,14 +799,6 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
-
-import base64
-if add_radio == "Learn":
-    file = "./assets/Which face is real.pdf"
-    show_pdf(file)
-
-# Assuming utility functions and necessary imports are already defined
-
 if add_radio == "Benchmark":
     st.write("## Benchmark your dataset")
     
@@ -974,16 +989,34 @@ if add_radio == "Benchmark":
                         ax.text(i, mean_inference_times[i] + 0.1, f'{mean_inference_times[i]:.2f}', ha='center', va='bottom')
                     st.pyplot(fig)
 
-                    # Plot probabilities
-                    for model in selected_models:
-                        fig, ax = plt.subplots()
-                        probabilities = [result[model]['probability'] for result in benchmark_results]
-                        ax.plot(range(len(probabilities)), probabilities, label=model)
-                        ax.set_title('DeepFake Probability')
-                        ax.set_xlabel('File Index')
-                        ax.set_ylabel('Probability')
-                        ax.legend()
-                        st.pyplot(fig)
+                    import plotly.graph_objects as go
+                    import streamlit as st
+
+                    # Function to render a speedometer-like gauge
+                    def render_speedometer(probability, title="DeepFake Probability"):
+                        fig = go.Figure(go.Indicator(
+                            mode="gauge+number",
+                            value=probability * 100,  # Convert to percentage
+                            title={'text': title},
+                            gauge={
+                                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                                'bar': {'color': "darkred"},
+                                'steps': [
+                                    {'range': [0, 50], 'color': "lightgreen"},
+                                    {'range': [50, 100], 'color': "tomato"}
+                                ],
+                                'threshold': {
+                                    'line': {'color': "red", 'width': 4},
+                                    'thickness': 0.75,
+                                    'value': 50  # Fake threshold
+                                }
+                            }
+                        ))
+                        st.plotly_chart(fig)
+
+                    # Example Usage
+                    render_speedometer(0.75, title="DeepFake Detection Score")  # Displays 75% probability
+
 
                     # Plot inference times
                     for model in selected_models:
@@ -1004,7 +1037,7 @@ if add_radio == "Benchmark":
 
 
 if add_radio == "About":
-    
+
 
 
     reference_list, len_list = get_reference()
@@ -1076,3 +1109,6 @@ if add_radio == "About":
         html = '<img src onerror="{}">'.format(js)
         div = Div(text=html)
         st.bokeh_chart(div)
+
+
+    
