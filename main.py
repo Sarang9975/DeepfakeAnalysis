@@ -150,7 +150,7 @@ if add_radio == "Detector":
 
     did_file_download = False
 
-    if uploaded_file is not None:
+    if uploaded_file:
 
         did_user_upload_file = True
 
