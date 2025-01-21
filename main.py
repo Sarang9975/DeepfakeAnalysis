@@ -51,16 +51,6 @@ from utils.convert2df import convert_df
 from utils.del_module import delete_module
 from utils.delete_temp_on_reload import clear_temp_folder_and_reload
 clear_temp_folder_and_reload()
-
-
-import shutil
-def clear_temp_directory():
-    temp_folder = "./temp"
-    if os.path.exists(temp_folder):
-        shutil.rmtree(temp_folder)
-    os.makedirs(temp_folder)  # Recreate an empty temp directory
-
-
 #references
 from utils.get_references_of_models import get_reference
 
@@ -679,13 +669,13 @@ if add_radio == "Detector":
                             st.session_state.probab = probab  # Store result
 
                         
-                        # Reset session state for new uploads
-                        if 'uploaded_file' in st.session_state:
-                            del st.session_state['uploaded_file']
-                        if 'probab' in st.session_state:
-                            del st.session_state['probab']
-                        if 'model_option' in st.session_state:
-                            del st.session_state['model_option']
+                if st.session_state.probab is not None:
+                    if st.session_state.probab <= 0.5:
+                        st.write("This file is **Real**.")
+                    elif st.session_state.probab == 0.5:
+                        st.write("This file is **Not Sure**.")
+                    else:
+                        st.write("This file is **Deepfake**.")
             
             
             if probab>0.7:
