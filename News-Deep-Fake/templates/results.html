@@ -1,46 +1,46 @@
 {% extends "bootstrap/base.html" %}
 {% block content %}
 
-<div class="container">
-    <div class="jumbotron" style="background-color:#1daeff !important;">
-        <h2 style="color:#fff;">Fake News Classifier App</h2>
-        <p style="color:#fff;"> Using Machine Learning to Classify News Statement</p>
+<div class="container" style="background-color: #121212; color: #e0e0e0; padding: 20px; border-radius: 8px; margin-top: 50px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);">
+    <div class="jumbotron text-center" style="background-color: #1e1e1e; border-radius: 8px; padding: 20px;">
+        <h2 style="color: #03dac6; font-weight: bold;">Fake News Classifier App</h2>
+        <p style="color: #e0e0e0;">Using Machine Learning to Classify News Statements</p>
     </div>
-    <p>ML App</p>
-</div>
 
+    <div class="card text-center" style="background-color: #1e1e1e; color: #e0e0e0; margin-top: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);">
+        <div class="card-header" style="background-color: #1563ff; color: #fff; font-weight: bold; padding: 10px;">
+            Results
+        </div>
+        <div class="card-body" style="padding: 20px;">
+            <h5 class="card-title" style="color: #03dac6; font-size: 1.5rem; font-weight: bold;">Fake News Classifier</h5>
+            <hr style="border-color: #03dac6;" />
 
-<div class="card text-center"> 
-    <div class="card-header">
-        Results
-    </div>
-    <div class="card-body" style="background-color: #1daeff;">
-        <h5 class="card-title">Fake News Classifier</h5>
-        <hr/>
-        <p class="card-text">
-            <div class = "alert alert-danger" role="alert">
-            {{ name }}   
-            </div>
-        </p>
-     
-<!-- Main ML Prediction Display Here -->   
-        {% if prediction == 0 %}
-        <p class="card-text">
-            <div class = "alert alert-danger" role="alert">
-                This news is Fake
-            </div>
-        </p>
-        <a href="#" class="btn btn-danger">Fake</a>
-        {% elif prediction == 1 %}
-        <p class="card-text">
-            <div class = "alert alert-danger" role="alert">
-                This news is Real
-            </div>
-        </p>
-        <a href="#" class="btn btn-primary">Real</a>
-        {% endif %}
-    </div>
-    <div class="card-footer text-muted"></div>
+            <p class="card-text">
+                <div class="alert alert-info" role="alert" style="background-color: #1e1e1e; border: 1px solid #03dac6; color: #03dac6; font-weight: bold;">
+                    {{ name }}
+                </div>
+            </p>
+
+            <!-- Main ML Prediction Display Here -->
+            {% if prediction == 0 %}
+            <p class="card-text">
+                <div class="alert alert-danger" role="alert" style="background-color: #ff5252; color: #121212; font-weight: bold;">
+                    This news is Fake
+                </div>
+            </p>
+            <a href="#" class="btn btn-danger" style="background-color: #ff5252; border: none; color: #121212; font-weight: bold;">Fake</a>
+            {% elif prediction == 1 %}
+            <p class="card-text">
+                <div class="alert alert-success" role="alert" style="background-color: #4caf50; color: #121212; font-weight: bold;">
+                    This news is Real
+                </div>
+            </p>
+            <a href="#" class="btn btn-primary" style="background-color: #4caf50; border: none; color: #121212; font-weight: bold;">Real</a>
+            {% endif %}
+        </div>
+        <div class="card-footer text-muted" style="background-color: #1e1e1e; color: #e0e0e0;">
+            Powered by Machine Learning
+        </div>
     </div>
 </div>
 
@@ -48,7 +48,22 @@
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet"
-        href="{{url_for('.static', filename='css/styles.css')}}">
 
+<style>
+    body {
+        background-color: #121212; /* Black background */
+        color: #e0e0e0; /* Light text */
+        font-family: 'Arial', sans-serif;
+    }
+    .jumbotron h2 {
+        font-size: 2.5rem;
+    }
+    .card-title {
+        margin-bottom: 20px;
+    }
+    .btn:hover {
+        background-color: #018786; /* Slightly darker teal for hover effect */
+        color: #fff;
+    }
+</style>
 {% endblock %}
