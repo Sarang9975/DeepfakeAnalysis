@@ -53,13 +53,19 @@ def main():
 
             # Step 1: Scrape text content from the URL
             scraped_text = scrape_text_from_url(url)
+
+            # Debug: Preview scraped text
+            st.write("Scraped Text Preview:", scraped_text[:500])
             
             # If scraping fails, show error
-            if "Error scraping the URL" in scraped_text:
-                st.error(f"Error: {scraped_text}")
+            if "Error scraping the URL" in scraped_text or len(scraped_text.strip()) < 50:
+                st.error("Error: Insufficient content scraped from the URL. Please try a different URL.")
             else:
                 # Step 2: Clean the scraped text
                 clean_data = process_text(scraped_text)
+
+                # Debug: Preview cleaned text
+                st.write("Cleaned Text Preview:", " ".join(clean_data[:50]))
 
                 # Join the cleaned list of words into a single string
                 cleaned_text = " ".join(clean_data)
@@ -67,8 +73,15 @@ def main():
                 # Step 3: Transform the text using the model's transformer
                 test_features = loaded_transformer.transform([cleaned_text])
 
+                # Debug: Check feature transformation
+                st.write("Feature Transformation Shape:", test_features.shape)
+
                 # Step 4: Make prediction
                 my_prediction, probabilities = get_predictions(loaded_model, test_features)
+
+                # Debug: Display probabilities and prediction
+                st.write("Probabilities:", probabilities)
+                st.write("Prediction:", my_prediction)
 
                 # Confidence scores for "real" and "fake"
                 real_confidence = float(probabilities[0][0]) * 100
@@ -76,26 +89,26 @@ def main():
 
                 # Display the prediction result
                 if my_prediction[0] == "real":
-                    if fake_confidence == 0.00:
-                        # Apply green background for "Real!"
-                        st.markdown(
-                            """
-                            <style>
-                                .real-bg {
-                                    background-color: #d4edda;
-                                    color: #155724;
-                                    padding: 10px;
-                                    border-radius: 5px;
-                                }
-                            </style>
-                            <div class="real-bg">Prediction: Real!</div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    else:
-                        st.success(f"Prediction: Real (Confidence: {real_confidence:.2f}%)")
+                    # Apply green background for "Prediction: Real"
+                    st.markdown(
+                        f"""
+                        <style>
+                            .real-bg {{
+                                background-color: #d4edda;
+                                color: #155724;
+                                padding: 15px;
+                                border-radius: 10px;
+                                text-align: center;
+                                font-size: 20px;
+                                font-weight: bold;
+                            }}
+                        </style>
+                        <div class="real-bg">Prediction: Fake! (Confidence: {real_confidence:.2f}%)</div>
+                        """,
+                        unsafe_allow_html=True
+                    )
                 else:
-                    st.error(f"Prediction: Fake (Confidence: {fake_confidence:.2f}%)")
+                    st.markdown(f"Prediction: Real (Confidence: {fake_confidence:.2f}%)")
 
         else:
             st.warning("Please enter a valid URL.")
